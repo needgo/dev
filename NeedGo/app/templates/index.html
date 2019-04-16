@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'/>
+    <title>NeedGo</title>
+    <link rel="icon" type="image/png" href="https://avatars3.githubusercontent.com/u/49691193?s=200&v=4">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+        center: [-5.986946905298026, 37.358331180668316], // starting position [lng, lat]
+        zoom: 15 // starting zoom
+    });
+</script>
+
+</body>
+</html>

@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ps31=%+h5&lx7=!qy!^2laby5ieu(z5(k(zj*q_pzzwy6qe!1g'
+MATBOX_TOKEN = 'pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'NeedGo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'app/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
