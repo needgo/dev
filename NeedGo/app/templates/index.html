@@ -6,6 +6,7 @@
     <link rel="icon" type="image/png" href="https://avatars3.githubusercontent.com/u/49691193?s=200&v=4">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'/>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
@@ -66,6 +67,11 @@
         .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine{
             display: none!important;
         }
+
+        .error{
+            color: red;
+        }
+
     </style>
 </head>
 <body>
@@ -79,18 +85,68 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <h4 center" class="modal-title" id="exampleModalCenterTitle">New card</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+
+          <div class="container">
+            <form method="post" action="http://127.0.0.1:8000/card/" id="saveForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input id="title" class="form-control" type="text" required name="title" maxlength="200">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input id="description" class="form-control" required type="text" name="description" maxlength="500">
+                </div>
+
+                <div class="form-group">
+                    <label for="hour">Start time</label>
+                    <input id="hour" class="form-control" required type="text" placeholder="17:00" name="hour">
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input id="duration" class="form-control" required type="number" name="duration" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input id="date" type="date" required name="date">
+
+                </div>
+
+                <input id="geojson" class="form-control" type="hidden" name="geojson">
+
+                <p class="error"></p>
+
+
+
+            </form>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="addOtherShape" data-dismiss="modal">Add other shape</button>
           <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" id="save" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -172,6 +228,32 @@
 
 
     //---- END draw
+
+    //Send card
+    $( "#save" ).click(function() {
+        $( ".error" ).html("")
+        $.post('http://127.0.0.1:8000/card/', $('#saveForm').serialize(), function(data, status) {
+            console.log(status);
+
+            if (status == 400){
+                $( ".error" ).html( data );
+            }
+
+        }).fail(function(jqxhr, settings, ex) {   $( ".error" ).html( jqxhr.responseText.slice(1, -1)) });
+        //$("#saveForm").ajaxForm({url: 'http://127.0.0.1:8000/card/', type: 'post'})
+        /*$.ajax({
+            type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+            url:"http://127.0.0.1:8000/card/", //url guarda la ruta hacia donde se hace la peticion
+            data:{title:"pepe",duration:10, date:"hola", description:"hola", geojson: "hola"}, // data recive un objeto con la informacion que se enviara al servidor
+            success:function(datos){ //success es una funcion que se utiliza si el servidor retorna informacion
+                 console.log(datos.promedio)
+             },
+            dataType: "json" // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
+        })*/
+    });
+    //----- END send card
+
+
     map.on('load', function () {
         map.loadImage('https://avatars3.githubusercontent.com/u/49691193?s=200&v=4', function (error, image) {
             if (error) throw error;
