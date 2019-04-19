@@ -5,8 +5,18 @@
     <title>NeedGo</title>
     <link rel="icon" type="image/png" href="https://avatars3.githubusercontent.com/u/49691193?s=200&v=4">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'/>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!--Draw buttons-->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
+
     <style>
         body {
             margin: 0;
@@ -19,6 +29,43 @@
             bottom: 0;
             width: 100%;
         }
+
+         #modalButton {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+
+        }
+
+        .alert{
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+
+        }
+
+        .btn-circle.btn-xl {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 25px;
+            font-size: 24px;
+            line-height: 1.33;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            padding: 6px 0px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.42857;
+        }
+
+        .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine{
+            display: none!important;
+        }
     </style>
 </head>
 <body>
@@ -27,23 +74,111 @@
 {#<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>#}
 {#<div style="float:right; margin:50px"><a href="#">Login</a></div>#}
 
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="addOtherShape" data-dismiss="modal">Add other shape</button>
+          <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-danger" role="alert">
+  You can't have 3 shapes at the same time
+</div>
+
+<button type="button" id="modalButton" class="btn btn-info btn-circle btn-xl"><i class="fa fa-check"></i></button>
+
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w';
     var map = new mapboxgl.Map({
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
         center: [-5.986946905298026, 37.358331180668316], // starting position [lng, lat]
-        zoom: 17 // starting zoom
+        zoom: 15 // starting zoom
     })
 
     map.addControl(new mapboxgl.NavigationControl());
 
+    //Draw buttons
+    var Draw = new MapboxDraw({
+
+
+        controls: {
+            trash: false
+
+        }
+    });
+    var status= 0;
+    $('#modalButton').hide();
+    $('.alert').hide();
+    map.addControl(Draw, 'top-left');
+
+    map.on('load', function() {
+      map.on('draw.create', updateArea);
+
+      function updateArea(e) {
+          console.log(Draw.getAll())
+
+          //Open the modal
+          $('#exampleModalCenter').modal('show');
+          $("#addOtherShape").show();
+          $('#modalButton').show();
+          status+= 1;
+          //If is the maximun, change the status
+          if (Draw.getAll().features.length == 2) {
+              $("#addOtherShape").hide();
+
+          //If there is two shapes, warning about it
+          }else if (Draw.getAll().features.length == 3){
+              status-= 1;
+              $("#addOtherShape").hide();
+              Draw.trash()
+              $('.alert').show();
+          }
+      }
+    });
+
+    $( "#cancel" ).click(function() {
+        $('.alert').hide();
+        status= 0
+        $('#exampleModalCenter').modal('hide');
+        $('#modalButton').hide();
+        Draw.deleteAll()
+    });
+
+    $( "#modalButton" ).click(function() {
+        $('.alert').hide();
+        $('#exampleModalCenter').modal('show');
+        if (Draw.getAll().features.length == 2) {
+            $("#addOtherShape").hide();
+        }
+    });
+
+
+
+
+    //---- END draw
     map.on('load', function () {
         map.loadImage('https://avatars3.githubusercontent.com/u/49691193?s=200&v=4', function (error, image) {
             if (error) throw error;
             map.addImage('needgo', image);
         });
     });
+
 
     map.on('load', function () {
 
