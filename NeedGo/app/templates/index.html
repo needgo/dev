@@ -24,13 +24,82 @@
 <body>
 
 <div id='map'></div>
+{#<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>#}
+{#<div style="float:right; margin:50px"><a href="#">Login</a></div>#}
+
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w';
     var map = new mapboxgl.Map({
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
         center: [-5.986946905298026, 37.358331180668316], // starting position [lng, lat]
-        zoom: 15 // starting zoom
+        zoom: 17 // starting zoom
+    })
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+    map.on('load', function () {
+        map.loadImage('https://avatars3.githubusercontent.com/u/49691193?s=200&v=4', function (error, image) {
+            if (error) throw error;
+            map.addImage('needgo', image);
+        });
+    });
+
+    map.on('load', function () {
+
+        map.addLayer({
+            "id": "points",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [-5.986946905298026, 37.358331180668316]
+                        },
+                        "properties": {
+                            "title": "Título de prueba 1",
+                            "description": "Descripción de prueba 1",
+                        }
+                    }, {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [-5.986106120036396, 37.35949146400422]
+                        },
+                        "properties": {
+                            "title": "Título de prueba 2",
+                            "description": "Descripción de prueba 2",
+                        }
+                    }]
+                },
+            },
+            "layout": {
+                "icon-image": "needgo",
+                "icon-size": 0.25
+            }
+        });
+    });
+
+    map.on('click', function (e) {
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ['points'] // replace this with the name of the layer
+        });
+
+        if (!features.length) {
+            return;
+        }
+
+        var feature = features[0];
+
+        var popup = new mapboxgl.Popup({offset: [0, -15]})
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
+            .setLngLat(feature.geometry.coordinates)
+            .addTo(map);
     });
 </script>
 
