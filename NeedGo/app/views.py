@@ -5,7 +5,9 @@ from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse
 import datetime
 import time
-
+from geojson import Feature, Point, FeatureCollection
+import json
+from .mapbox_manager import create_mapbox
 
 
 
@@ -24,7 +26,20 @@ def index(request):
     return render(request, 'index.html')
 
 
+def check_types(features):
 
+    map= {["LineString", "LineString"]: "MultiLineString",
+          ["Point", "Point"]: "MultiPoint",
+          ["Polygon", "Polygon"]: "MultiPolygon",
+          ["LineString"]: "LineString",
+          ["Point"]: "Point",
+          ["Polygon"]: "Polygon"}
+
+    key= []
+    for feature in json.loads(features)['features']:
+        key.append(feature['geometry']['type'])
+
+    return map.get(key)
 
 @csrf_exempt
 @transaction.atomic
@@ -40,6 +55,14 @@ def save_card(request):
     if check != True:
         return check
 
+    for feature in json.loads(geojson)['features']:
+        feature['properties']['hour'] = hour
+        feature['properties']['duration'] = duration
+        feature['properties']['title'] = title
+        feature['properties']['description'] = description
+        feature['properties']['date'] = date
+        create_mapbox(feature)
+
     return JSONResponse("", status=200)
 
 
@@ -54,6 +77,14 @@ def validate(date_text):
         if date < today:
             result= False
     except ValueError:
+        result= False
+    return result
+
+def is_json(myjson):
+    result= True
+    try:
+        json_object = json.loads(myjson)
+    except ValueError as e:
         result= False
     return result
 
@@ -97,5 +128,26 @@ def check_form(request):
         return JSONResponse("You must especify the date", status=400)
     elif not validate(date):
         return JSONResponse("The date must be a correct date in the future", status=400)
+
+    # Check geojson
+    if geojson == None or geojson.strip() == "":
+        return JSONResponse("You can't modify the form", status=400)
+    elif not is_json(geojson):
+        return JSONResponse("The geojson is not a valid json", status=400)
+
+    geojson = json.loads(geojson)
+
+    if not isinstance(json.dumps(geojson), list):
+        geojsonObject = Feature(geojson['features'][0])
+    elif len(json.dumps(geojson)) == 2:
+        geojsonObject = FeatureCollection([geojson['features'][0], geojson['features'][1]])
+
+    else:
+        return JSONResponse("The number of shapes is bigger than 2", status=400)
+
+
+    if not geojsonObject.is_valid:
+        return JSONResponse("The Geojson is not valid", status=400)
+
 
     return True

@@ -208,13 +208,17 @@
       }
     });
 
-    $( "#cancel" ).click(function() {
+
+    function reset() {
         $('.alert').hide();
         status= 0
         $('#exampleModalCenter').modal('hide');
         $('#modalButton').hide();
+        $('#saveForm').trigger("reset");
         Draw.deleteAll()
-    });
+    };
+
+    $( "#cancel" ).click(reset)
 
     $( "#modalButton" ).click(function() {
         $('.alert').hide();
@@ -232,24 +236,16 @@
     //Send card
     $( "#save" ).click(function() {
         $( ".error" ).html("")
+        $("#geojson").val(JSON.stringify(Draw.getAll()))
         $.post('http://127.0.0.1:8000/card/', $('#saveForm').serialize(), function(data, status) {
             console.log(status);
 
-            if (status == 400){
-                $( ".error" ).html( data );
+            if (status == "success"){
+                reset()
             }
 
         }).fail(function(jqxhr, settings, ex) {   $( ".error" ).html( jqxhr.responseText.slice(1, -1)) });
-        //$("#saveForm").ajaxForm({url: 'http://127.0.0.1:8000/card/', type: 'post'})
-        /*$.ajax({
-            type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
-            url:"http://127.0.0.1:8000/card/", //url guarda la ruta hacia donde se hace la peticion
-            data:{title:"pepe",duration:10, date:"hola", description:"hola", geojson: "hola"}, // data recive un objeto con la informacion que se enviara al servidor
-            success:function(datos){ //success es una funcion que se utiliza si el servidor retorna informacion
-                 console.log(datos.promedio)
-             },
-            dataType: "json" // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
-        })*/
+
     });
     //----- END send card
 
@@ -318,6 +314,20 @@
             .setLngLat(feature.geometry.coordinates)
             .addTo(map);
     });
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBpuGL6zOdo8VqG3YXr9IK-TXbaEi0RYuE",
+    authDomain: "needgo-a9bfb.firebaseapp.com",
+    databaseURL: "https://needgo-a9bfb.firebaseio.com",
+    projectId: "needgo-a9bfb",
+    storageBucket: "needgo-a9bfb.appspot.com",
+    messagingSenderId: "1080444748667"
+  };
+  firebase.initializeApp(config);
 </script>
 
 </body>
