@@ -160,12 +160,12 @@
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w';
-    var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/needgo/cjupgkimp20qw1fs0ettjvjht',
         center: [-5.986946905298026, 37.358331180668316], // starting position [lng, lat]
         zoom: 15 // starting zoom
-    })
+    });
 
     map.addControl(new mapboxgl.NavigationControl());
 
