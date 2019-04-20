@@ -26,20 +26,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-def check_types(features):
 
-    map= {["LineString", "LineString"]: "MultiLineString",
-          ["Point", "Point"]: "MultiPoint",
-          ["Polygon", "Polygon"]: "MultiPolygon",
-          ["LineString"]: "LineString",
-          ["Point"]: "Point",
-          ["Polygon"]: "Polygon"}
-
-    key= []
-    for feature in json.loads(features)['features']:
-        key.append(feature['geometry']['type'])
-
-    return map.get(key)
 
 @csrf_exempt
 @transaction.atomic
@@ -55,13 +42,38 @@ def save_card(request):
     if check != True:
         return check
 
-    for feature in json.loads(geojson)['features']:
-        feature['properties']['hour'] = hour
-        feature['properties']['duration'] = duration
-        feature['properties']['title'] = title
-        feature['properties']['description'] = description
-        feature['properties']['date'] = date
-        create_mapbox(feature)
+    #If geojson has one element
+    features = json.loads(geojson)['features']
+    if len(features) == 2:
+
+        type = check_types(features)
+        features[0]['geometry']['type'] = type
+
+        if type == "MultiPoint":
+            features[0]['geometry']['coordinates'] = [
+                features[0]['geometry']['coordinates'],
+                features[1]['geometry']['coordinates']
+            ]
+        elif type == "MultiLineString":
+
+            features[0]['geometry']['coordinates'] = [
+                features[0]['geometry']['coordinates'][0],
+                features[1]['geometry']['coordinates'][0]
+            ]
+        else:
+            features[0]['geometry']['coordinates'] = [
+                [features[0]['geometry']['coordinates'][0]],
+                [features[1]['geometry']['coordinates'][0]]
+            ]
+    features[0]['properties']['hour'] = hour
+    features[0]['properties']['duration'] = duration
+    features[0]['properties']['title'] = title
+    features[0]['properties']['description'] = description
+    features[0]['properties']['date'] = date
+    create_mapbox(features[0])
+    print(features[0])
+
+
 
     return JSONResponse("", status=200)
 
@@ -151,3 +163,23 @@ def check_form(request):
 
 
     return True
+
+
+def check_types(features):
+    map = {"LineStringLineString": "MultiLineString",
+           "PointPoint": "MultiPoint",
+           "PolygonPolygon": "MultiPolygon",
+           "LineString": "LineString",
+           "Point": "Point",
+           "Polygon": "Polygon"}
+
+    key = ""
+    for feature in features:
+        key += feature['geometry']['type']
+
+    result = map.get(key)
+
+    if result == None:
+        result = "GeometryCollection"
+
+    return result
