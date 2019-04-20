@@ -42,7 +42,7 @@ def save_card(request):
     if check != True:
         return check
 
-    #If geojson has one element
+    #If geojson has two element
     features = json.loads(geojson)['features']
     if len(features) == 2:
 
@@ -55,10 +55,11 @@ def save_card(request):
                 features[1]['geometry']['coordinates']
             ]
         elif type == "MultiLineString":
-
+            print(features[0]['geometry']['coordinates'])
+            print(features[1]['geometry']['coordinates'])
             features[0]['geometry']['coordinates'] = [
-                features[0]['geometry']['coordinates'][0],
-                features[1]['geometry']['coordinates'][0]
+                features[0]['geometry']['coordinates'],
+                features[1]['geometry']['coordinates']
             ]
         else:
             features[0]['geometry']['coordinates'] = [
@@ -71,7 +72,7 @@ def save_card(request):
     features[0]['properties']['description'] = description
     features[0]['properties']['date'] = date
     create_mapbox(features[0])
-    print(features[0])
+
 
 
 
