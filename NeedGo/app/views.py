@@ -47,7 +47,9 @@ def save_card(request):
     if len(features) == 2:
 
         type = check_types(features)
-        features[0]['geometry']['type'] = type
+
+        if type != "GeometryCollection":
+            features[0]['geometry']['type'] = type
 
         if type == "MultiPoint":
             features[0]['geometry']['coordinates'] = [
@@ -61,11 +63,33 @@ def save_card(request):
                 features[0]['geometry']['coordinates'],
                 features[1]['geometry']['coordinates']
             ]
-        else:
+        elif type == "Multipolygon":
             features[0]['geometry']['coordinates'] = [
                 [features[0]['geometry']['coordinates'][0]],
                 [features[1]['geometry']['coordinates'][0]]
             ]
+
+        else:
+            features[0]['properties']['hour'] = hour
+            features[0]['properties']['duration'] = duration
+            features[0]['properties']['title'] = title
+            features[0]['properties']['description'] = description
+            features[0]['properties']['date'] = date
+            create_mapbox(features[0])
+
+            features[1]['properties']['hour'] = hour
+            features[1]['properties']['duration'] = duration
+            features[1]['properties']['title'] = title
+            features[1]['properties']['description'] = description
+            features[1]['properties']['date'] = date
+            create_mapbox(features[1])
+
+            return JSONResponse("", status=200)
+
+    elif len(features) > 2:
+        return JSONResponse("You can't save more than two shapes at the same time", status=400)
+
+
     features[0]['properties']['hour'] = hour
     features[0]['properties']['duration'] = duration
     features[0]['properties']['title'] = title

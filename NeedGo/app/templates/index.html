@@ -64,6 +64,7 @@
             line-height: 1.42857;
         }
 
+
         .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine{
             display: none!important;
         }
@@ -85,14 +86,14 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 center" class="modal-title" id="exampleModalCenterTitle">New card</h4>
+        <h4 center class="modal-title" id="exampleModalCenterTitle">New card</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
 
-          <div class="container">
+          <div class="container" style="width:100%!important">
             <form method="post" action="http://127.0.0.1:8000/card/" id="saveForm">
                 {% csrf_token %}
                 <div class="form-group">

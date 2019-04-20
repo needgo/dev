@@ -7,30 +7,10 @@ def create_mapbox(geojson):
 
     token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
 
-    print(geojson['id'])
+    print(geojson)
     url= "https://api.mapbox.com/datasets/v1/needgo/cjuojgd9c01z632la84qa1v61/features/"+str(geojson['id'])+"?access_token="+token
-
-    params =  {
-        "id": str(geojson['id']),
-        "type": "Feature",
-        "geometry": {
-         "type": "GeometryCollection",
-         "geometries": [{
-             "type": "Point",
-             "coordinates": [100.0, 0.0]
-         }, {
-             "type": "LineString",
-             "coordinates": [
-                 [101.0, 0.0],
-                 [102.0, 1.0]
-             ]
-         }]
-     },
-        "properties": {
-            "prop0": "value0"
-        }
-    }
     params = geojson
+
 
 
     try:
