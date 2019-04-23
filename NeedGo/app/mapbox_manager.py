@@ -20,11 +20,10 @@ def create_mapbox(geojson):
         print(e)
         response = "Error saving record in mapbox"
 
-    print(response)
     return response
 
 
-def delete_mapbox(category, idFeature):
+def delete_mapbox(idFeature):
     # Mapbox configuration
     token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
 
