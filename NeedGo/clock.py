@@ -25,7 +25,7 @@ def update_mapbox_function():
     url = "https://api.mapbox.com/uploads/v1/needgo?access_token="+token
     params = {
         "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
-        "url": "mapbox://datasets/needgo/cjtke1edi02q02wn5kjd9en24",
+        "url": "mapbox://datasets/needgo/cjuojgd9c01z632la84qa1v61",
         "name": "cjuojgd9c01z632la84qa1v61-0fykf"
     }
 
@@ -33,6 +33,7 @@ def update_mapbox_function():
         request = post(url, json=params)
         response = request.text
     except RequestException:
+        print("EXCEPTION")
         response = "Error saving record in mapbox"
 
     return response
