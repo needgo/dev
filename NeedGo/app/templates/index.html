@@ -100,7 +100,7 @@
             <div class="modal-body">
 
                 <div class="container" style="width:100%!important">
-                    <form method="post" action="http://127.0.0.1:8000/card/" id="saveForm">
+                    <form method="post" action="/card/" id="saveForm">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="title">Title</label>
@@ -233,7 +233,7 @@
     $("#save").click(function () {
         $(".error").html("")
         $("#geojson").val(JSON.stringify(Draw.getAll()))
-        $.post('http://127.0.0.1:8000/card/', $('#saveForm').serialize(), function (data, status) {
+        $.post('/card/', $('#saveForm').serialize(), function (data, status) {
             console.log(status);
 
             if (status == "success") {
