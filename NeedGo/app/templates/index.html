@@ -6,17 +6,24 @@
     <link rel="icon" type="image/png" href="https://avatars3.githubusercontent.com/u/49691193?s=200&v=4">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"
+            integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i"
+            crossorigin="anonymous"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'/>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
 
     <!--Draw buttons-->
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css'
+          type='text/css'/>
 
     <style>
         body {
@@ -31,14 +38,14 @@
             width: 100%;
         }
 
-         #modalButton {
+        #modalButton {
             position: absolute;
             bottom: 40px;
             right: 10px;
 
         }
 
-        .alert{
+        .alert {
             position: absolute;
             bottom: 40px;
             left: 10px;
@@ -65,11 +72,11 @@
         }
 
 
-        .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine{
-            display: none!important;
+        .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine {
+            display: none !important;
         }
 
-        .error{
+        .error {
             color: red;
         }
 
@@ -79,82 +86,72 @@
 
 <div id='map'></div>
 {#<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>#}
-{#<div style="float:right; margin:50px"><a href="#">Login</a></div>#}
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 center class="modal-title" id="exampleModalCenterTitle">New card</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container" style="width:100%!important">
+                    <form method="post" action="http://127.0.0.1:8000/card/" id="saveForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input id="title" class="form-control" type="text" required name="title" maxlength="200">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input id="description" class="form-control" required type="text" name="description"
+                                   maxlength="500">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hour">Start time</label>
+                            <input id="hour" class="form-control" required type="text" placeholder="17:00" name="hour">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duration (minutes)</label>
+                            <input id="duration" class="form-control" required type="number" name="duration" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input id="date" type="date" required name="date">
+
+                        </div>
+
+                        <input id="geojson" class="form-control" type="hidden" name="geojson">
+
+                        <p class="error"></p>
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 center class="modal-title" id="exampleModalCenterTitle">New card</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-          <div class="container" style="width:100%!important">
-            <form method="post" action="http://127.0.0.1:8000/card/" id="saveForm">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input id="title" class="form-control" type="text" required name="title" maxlength="200">
+                    </form>
                 </div>
 
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input id="description" class="form-control" required type="text" name="description" maxlength="500">
-                </div>
 
-                <div class="form-group">
-                    <label for="hour">Start time</label>
-                    <input id="hour" class="form-control" required type="text" placeholder="17:00" name="hour">
-                </div>
-
-                <div class="form-group">
-                    <label for="duration">Duration (minutes)</label>
-                    <input id="duration" class="form-control" required type="number" name="duration" min="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Date</label>
-                    <input id="date" type="date" required name="date">
-
-                </div>
-
-                <input id="geojson" class="form-control" type="hidden" name="geojson">
-
-                <p class="error"></p>
-
-
-
-            </form>
-          </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="addOtherShape" data-dismiss="modal">Add other shape</button>
-          <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
-        <button type="button" id="save" class="btn btn-primary">Save changes</button>
-      </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="addOtherShape" data-dismiss="modal">Add other
+                    shape
+                </button>
+                <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
+                <button type="button" id="save" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="alert alert-danger" role="alert">
-  You can't have 3 shapes at the same time
+    You can't have 3 shapes at the same time
 </div>
 
 <button type="button" id="modalButton" class="btn btn-info btn-circle btn-xl"><i class="fa fa-check"></i></button>
@@ -179,49 +176,49 @@
 
         }
     });
-    var status= 0;
+    var status = 0;
     $('#modalButton').hide();
     $('.alert').hide();
     map.addControl(Draw, 'top-left');
 
-    map.on('load', function() {
-      map.on('draw.create', updateArea);
+    map.on('load', function () {
+        map.on('draw.create', updateArea);
 
-      function updateArea(e) {
-          console.log(Draw.getAll())
+        function updateArea(e) {
+            console.log(Draw.getAll())
 
-          //Open the modal
-          $('#exampleModalCenter').modal('show');
-          $("#addOtherShape").show();
-          $('#modalButton').show();
-          status+= 1;
-          //If is the maximun, change the status
-          if (Draw.getAll().features.length == 2) {
-              $("#addOtherShape").hide();
+            //Open the modal
+            $('#exampleModalCenter').modal('show');
+            $("#addOtherShape").show();
+            $('#modalButton').show();
+            status += 1;
+            //If is the maximun, change the status
+            if (Draw.getAll().features.length == 2) {
+                $("#addOtherShape").hide();
 
-          //If there is two shapes, warning about it
-          }else if (Draw.getAll().features.length == 3){
-              status-= 1;
-              $("#addOtherShape").hide();
-              Draw.trash()
-              $('.alert').show();
-          }
-      }
+                //If there is two shapes, warning about it
+            } else if (Draw.getAll().features.length == 3) {
+                status -= 1;
+                $("#addOtherShape").hide();
+                Draw.trash()
+                $('.alert').show();
+            }
+        }
     });
 
 
     function reset() {
         $('.alert').hide();
-        status= 0
+        status = 0
         $('#exampleModalCenter').modal('hide');
         $('#modalButton').hide();
         $('#saveForm').trigger("reset");
         Draw.deleteAll()
     };
 
-    $( "#cancel" ).click(reset)
+    $("#cancel").click(reset)
 
-    $( "#modalButton" ).click(function() {
+    $("#modalButton").click(function () {
         $('.alert').hide();
         $('#exampleModalCenter').modal('show');
         if (Draw.getAll().features.length == 2) {
@@ -230,77 +227,56 @@
     });
 
 
-
-
     //---- END draw
 
     //Send card
-    $( "#save" ).click(function() {
-        $( ".error" ).html("")
+    $("#save").click(function () {
+        $(".error").html("")
         $("#geojson").val(JSON.stringify(Draw.getAll()))
-        $.post('http://127.0.0.1:8000/card/', $('#saveForm').serialize(), function(data, status) {
+        $.post('http://127.0.0.1:8000/card/', $('#saveForm').serialize(), function (data, status) {
             console.log(status);
 
-            if (status == "success"){
+            if (status == "success") {
                 reset()
             }
 
-        }).fail(function(jqxhr, settings, ex) {   $( ".error" ).html( jqxhr.responseText.slice(1, -1)) });
+        }).fail(function (jqxhr, settings, ex) {
+            $(".error").html(jqxhr.responseText.slice(1, -1))
+        });
 
     });
     //----- END send card
 
-
-    map.on('load', function () {
-        map.loadImage('https://avatars3.githubusercontent.com/u/49691193?s=200&v=4', function (error, image) {
-            if (error) throw error;
-            map.addImage('needgo', image);
-        });
+    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+    map.on('mouseenter', 'app point', function () {
+        map.getCanvas().style.cursor = 'pointer';
     });
 
+    map.on('mouseenter', 'app poly', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
 
-    map.on('load', function () {
+    map.on('mouseenter', 'app line', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
 
-        map.addLayer({
-            "id": "points",
-            "type": "symbol",
-            "source": {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": [{
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-5.986946905298026, 37.358331180668316]
-                        },
-                        "properties": {
-                            "title": "Título de prueba 1",
-                            "description": "Descripción de prueba 1",
-                        }
-                    }, {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-5.986106120036396, 37.35949146400422]
-                        },
-                        "properties": {
-                            "title": "Título de prueba 2",
-                            "description": "Descripción de prueba 2",
-                        }
-                    }]
-                },
-            },
-            "layout": {
-                "icon-image": "needgo",
-                "icon-size": 0.25
-            }
-        });
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'app point', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('mouseleave', 'app poly', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('mouseleave', 'app line', function () {
+        map.getCanvas().style.cursor = '';
     });
 
     map.on('click', function (e) {
+
         var features = map.queryRenderedFeatures(e.point, {
-            layers: ['points'] // replace this with the name of the layer
+            layers: ['app point', 'app poly', 'app line'],
         });
 
         if (!features.length) {
@@ -309,26 +285,13 @@
 
         var feature = features[0];
 
-        var popup = new mapboxgl.Popup({offset: [0, -15]})
-            .setLngLat(feature.geometry.coordinates)
-            .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
-            .setLngLat(feature.geometry.coordinates)
+        var popup = new mapboxgl.Popup({offset: [0, 0]})
+            .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p><b>Description: </b>' + feature.properties.description + '</p>' +
+                '<p><b>Date: </b>' + feature.properties.date + '</p><p><b>Hour: </b>' + feature.properties.hour + '</p><p><b>Duration: </b>' + feature.properties.duration + '</p>')
+            .setLngLat([String(feature.geometry.coordinates).split(",")[0], String(feature.geometry.coordinates).split(",")[1]])
             .addTo(map);
     });
-</script>
 
-<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBpuGL6zOdo8VqG3YXr9IK-TXbaEi0RYuE",
-    authDomain: "needgo-a9bfb.firebaseapp.com",
-    databaseURL: "https://needgo-a9bfb.firebaseio.com",
-    projectId: "needgo-a9bfb",
-    storageBucket: "needgo-a9bfb.appspot.com",
-    messagingSenderId: "1080444748667"
-  };
-  firebase.initializeApp(config);
 </script>
 
 </body>

@@ -10,7 +10,6 @@ import json
 from .mapbox_manager import create_mapbox
 
 
-
 # Create your views here.
 class JSONResponse(HttpResponse):
     """
@@ -22,10 +21,9 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+
 def index(request):
     return render(request, 'index.html')
-
-
 
 
 @csrf_exempt
@@ -42,7 +40,7 @@ def save_card(request):
     if check != True:
         return check
 
-    #If geojson has two element
+    # If geojson has two element
     features = json.loads(geojson)['features']
     if len(features) == 2:
 
@@ -89,7 +87,6 @@ def save_card(request):
     elif len(features) > 2:
         return JSONResponse("You can't save more than two shapes at the same time", status=400)
 
-
     features[0]['properties']['hour'] = hour
     features[0]['properties']['duration'] = duration
     features[0]['properties']['title'] = title
@@ -97,33 +94,31 @@ def save_card(request):
     features[0]['properties']['date'] = date
     create_mapbox(features[0])
 
-
-
-
     return JSONResponse("", status=200)
 
 
-
-#Auxiliary methods
+# Auxiliary methods
 def validate(date_text):
-    result= True
+    result = True
     try:
-        date= datetime.datetime.strptime(date_text, '%Y-%m-%d')
-        today= datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
+        date = datetime.datetime.strptime(date_text, '%Y-%m-%d')
+        today = datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
 
         if date < today:
-            result= False
+            result = False
     except ValueError:
-        result= False
+        result = False
     return result
 
+
 def is_json(myjson):
-    result= True
+    result = True
     try:
         json_object = json.loads(myjson)
     except ValueError as e:
-        result= False
+        result = False
     return result
+
 
 def check_form(request):
     date = request.POST.get('date')
@@ -133,7 +128,7 @@ def check_form(request):
     geojson = request.POST.get('geojson')
     hour = request.POST.get('hour')
 
-    #Check title
+    # Check title
     if title == None or title.strip() == "":
         return JSONResponse("You must especify the title", status=400)
     elif len(title) > 200:
@@ -153,11 +148,13 @@ def check_form(request):
     elif int(duration) < 1:
         return JSONResponse("The minimum duration is 1 minute", status=400)
 
-    #Check hour
+    # Check hour
     if hour == None or hour.strip() == "":
         return JSONResponse("You must especify the hour", status=400)
     numbers = hour.split(":")
-    if len(numbers) != 2 or not numbers[0].isdigit() or not numbers[1].isdigit() or len(numbers[0])!=2 or len(numbers[1])!=2 or  int(numbers[0]) < 0 or int(numbers[0]) > 23 or int(numbers[1]) < 0 or int(numbers[1]) > 59:
+    if len(numbers) != 2 or not numbers[0].isdigit() or not numbers[1].isdigit() or len(numbers[0]) != 2 or len(
+            numbers[1]) != 2 or int(numbers[0]) < 0 or int(numbers[0]) > 23 or int(numbers[1]) < 0 or int(
+            numbers[1]) > 59:
         return JSONResponse("The hour format is not correct", status=400)
 
     # Check date
@@ -182,10 +179,8 @@ def check_form(request):
     else:
         return JSONResponse("The number of shapes is bigger than 2", status=400)
 
-
     if not geojsonObject.is_valid:
         return JSONResponse("The Geojson is not valid", status=400)
-
 
     return True
 
