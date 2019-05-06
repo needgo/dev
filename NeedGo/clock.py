@@ -11,7 +11,13 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 scheduler = BlockingScheduler()
 
 
-def update_mapbox():
+@scheduler.scheduled_job('cron', id='update_mapbox_function_id', minute='*')
+def update_mapbox_function():
+
+    """
+    CRON job to update mapbox.
+    TRIGGER: Every minute.
+    """
 
     # Mapbox configuration
     token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
@@ -30,17 +36,6 @@ def update_mapbox():
         response = "Error saving record in mapbox"
 
     return response
-
-
-@scheduler.scheduled_job('cron', id='update_mapbox_function_id', minute='*')
-def update_mapbox_function():
-
-    """
-    CRON job to update mapbox.
-    TRIGGER: Every minute.
-    """
-
-    update_mapbox()
 
 
 scheduler.start()
