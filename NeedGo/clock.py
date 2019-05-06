@@ -5,7 +5,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NeedGo.settings')
 django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-from NeedGo.app.mapbox_manager import update_mapbox
+# from app.mapbox_manager import update_mapbox
+
+import NeedGo.app.mapbox_manager
 
 scheduler = BlockingScheduler()
 
@@ -18,7 +20,7 @@ def update_mapbox_function():
     TRIGGER: Every minute.
     """
 
-    update_mapbox()
+    NeedGo.app.mapbox_manager.update_mapbox()
 
 
 scheduler.start()
