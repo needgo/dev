@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'/>
-    <title>NeedGo</title>
+    <title>draw2meet</title>
     <link rel="icon" type="image/png" href="https://avatars3.githubusercontent.com/u/49691193?s=200&v=4">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -71,7 +71,6 @@
             line-height: 1.42857;
         }
 
-
         .mapbox-gl-draw_combine, .mapbox-gl-draw_uncombine {
             display: none !important;
         }
@@ -84,7 +83,7 @@
 </head>
 <body>
 
-<div id='map'></div>
+<div data-tap-disabled="true"><div id='map'></div></div>
 {#<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>#}
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

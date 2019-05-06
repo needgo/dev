@@ -10,7 +10,7 @@ scheduler = BlockingScheduler()
 
 
 @scheduler.scheduled_job('cron', id='update_mapbox', minute='*')
-def update_mapbox():
+def update_mapbox_function():
 
     """
     CRON job to update mapbox.
