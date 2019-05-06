@@ -36,24 +36,3 @@ def delete_mapbox(idFeature):
         response = "Error deleting record in mapbox"
 
     return response
-
-
-def update_mapbox():
-
-    # Mapbox configuration
-    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
-
-    url = "https://api.mapbox.com/uploads/v1/needgo?access_token="+token
-    params = {
-        "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
-        "url": "mapbox://datasets/needgo/cjtke1edi02q02wn5kjd9en24",
-        "name": "cjuojgd9c01z632la84qa1v61-0fykf"
-    }
-
-    try:
-        request = post(url, json=params)
-        response = request.text
-    except RequestException:
-        response = "Error saving record in mapbox"
-
-    return response
