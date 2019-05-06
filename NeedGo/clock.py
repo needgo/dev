@@ -6,7 +6,7 @@ django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from app.mapbox_manager import update_mapbox
+from .app import mapbox_manager
 
 scheduler = BlockingScheduler()
 
@@ -19,7 +19,7 @@ def update_mapbox_function():
     TRIGGER: Every minute.
     """
 
-    update_mapbox()
+    mapbox_manager.update_mapbox()
 
 
 scheduler.start()
