@@ -5,7 +5,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
 django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-
 from .mapbox_manager import update_mapbox
 
 scheduler = BlockingScheduler()
