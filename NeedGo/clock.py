@@ -6,7 +6,7 @@ django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from .app.mapbox_manager import update_mapbox
+from app.mapbox_manager import update_mapbox
 
 scheduler = BlockingScheduler()
 
