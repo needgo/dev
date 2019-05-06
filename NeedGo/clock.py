@@ -6,7 +6,7 @@ django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from .app import mapbox_manager
+from NeedGo.app import mapbox_manager
 
 scheduler = BlockingScheduler()
 
