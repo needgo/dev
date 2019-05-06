@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "NeedGo.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NeedGo.settings')
 django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
