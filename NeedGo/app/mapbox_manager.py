@@ -47,7 +47,7 @@ def update_mapbox():
     params = {
         "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
         "url": "mapbox://datasets/needgo/cjtke1edi02q02wn5kjd9en24",
-        "name": "needgo.cjuojgd9c01z632la84qa1v61-0fykf".split(".")[1]
+        "name": "cjuojgd9c01z632la84qa1v61-0fykf"
     }
 
     try:
