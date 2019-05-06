@@ -6,7 +6,7 @@ django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from NeedGo import app
+from . import app
 
 scheduler = BlockingScheduler()
 
