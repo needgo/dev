@@ -22,15 +22,13 @@ def update_mapbox_function():
     """
 
     # Mapbox configuration
-    token = "pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w"
+    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
 
-    print("LLEGA AQUI 1")
-
-    url = "https://api.mapbox.com/uploads/v1/needgo?access_token="+token
+    url = "https://api.mapbox.com/uploads/v1/needgo?access_token=" + token
     params = {
         "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
-        "url": "mapbox://datasets/needgo/cjuojgd9c01z632la84qa1v61",
-        "name": "app"
+        "url": "mapbox://datasets/needgo/" + "cjuojgd9c01z632la84qa1v61",
+        "name": "needgo.cjuojgd9c01z632la84qa1v61-0fykf".split(".")[1]
     }
 
     print("LLEGA AQUI 2")
