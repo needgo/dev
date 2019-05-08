@@ -14,7 +14,6 @@ scheduler = BlockingScheduler()
 @scheduler.scheduled_job('cron', id='update_mapbox_function_id', minute='*')
 def update_mapbox_function():
 
-    print("ENTRA -------------------------------------------------")
 
     """
     CRON job to update mapbox.
@@ -26,23 +25,19 @@ def update_mapbox_function():
 
     url = "https://api.mapbox.com/uploads/v1/needgo?access_token=" + token
     params = {
-        "tileset": "needgo.app",
+        "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
         "url": "mapbox://datasets/needgo/" + "cjuojgd9c01z632la84qa1v61",
-        "name": "app"
+        "name": "cjuojgd9c01z632la84qa1v61-0fykf"
     }
 
-    print("LLEGA AQUI 2")
 
-    print(params)
     try:
-        print("intento")
         request = post(url, json=params)
-        print("se hace request")
-        print(request)
+
         response = request.text
-        print(response)
+
     except RequestException:
-        print("EXCEPTION")
+
         response = "Error saving record in mapbox"
 
     return response
