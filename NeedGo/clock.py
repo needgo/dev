@@ -35,6 +35,7 @@ def update_mapbox_function():
         request = post(url, json=params)
 
         response = request.text
+        print(response)
 
     except RequestException:
 
