@@ -39,7 +39,9 @@ def update_mapbox_function():
         print("intento")
         request = post(url, json=params)
         print("se hace request")
+        print(request)
         response = request.text
+        print(response)
     except RequestException:
         print("EXCEPTION")
         response = "Error saving record in mapbox"
