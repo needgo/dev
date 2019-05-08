@@ -30,7 +30,7 @@ def update_mapbox_function():
     params = {
         "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
         "url": "mapbox://datasets/needgo/cjuojgd9c01z632la84qa1v61",
-        "name": "cjuojgd9c01z632la84qa1v61-0fykf"
+        "name": "app"
     }
 
     print("LLEGA AQUI 2")
