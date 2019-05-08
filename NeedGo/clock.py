@@ -22,7 +22,7 @@ def update_mapbox_function():
     """
 
     # Mapbox configuration
-    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
+    token = "pk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdWswZmJpZzFtMTE0YXFqdGh4YnZoMmMifQ.GZbMmC37CMX-52pi9AK_8w"
 
     print("LLEGA AQUI 1")
 
@@ -35,6 +35,7 @@ def update_mapbox_function():
 
     print("LLEGA AQUI 2")
 
+    print(params)
     try:
         print("intento")
         request = post(url, json=params)
