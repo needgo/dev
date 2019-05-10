@@ -293,7 +293,15 @@
     map.on('load', function () {
 
         map.on('moveend', function () {
-            var features = map.queryRenderedFeatures({layers: ['app point', 'point', 'polygon', 'line']});
+            var layersArray = ['app point', 'point', 'polygon', 'line']
+            var layersCopy = []
+            for(layerElement in layersArray){
+                if(typeof map.getLayer(layersArray[layerElement]) != "undefined"){
+                    layersCopy.push(layersArray[layerElement]);
+                }
+            }
+
+            var features = map.queryRenderedFeatures({layers: layersCopy});
 
             if (features) {
 
@@ -556,6 +564,14 @@
     });
 
     map.on('click', function (e) {
+
+        var layersArray = ['app point', 'point', 'polygon', 'line']
+        var layersCopy = []
+        for(layerElement in layersArray){
+            if(typeof map.getLayer(layersArray[layerElement]) != "undefined"){
+                layersCopy.push(layersArray[layerElement]);
+            }
+        }
 
         var features = map.queryRenderedFeatures(e.point, {
             layers: ['app point', 'app poly', 'app line', 'point', 'line', 'polygon'],
