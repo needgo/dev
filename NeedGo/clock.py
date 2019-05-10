@@ -47,7 +47,7 @@ def update_mapbox_function():
 
 
 @scheduler.scheduled_job('cron', id='delete_mapbox_function', hour=0)
-def delete_mapbox_function(request):
+def delete_mapbox_function():
     # Mapbox configuration
     token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
 
