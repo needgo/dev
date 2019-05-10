@@ -229,8 +229,8 @@
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/needgo/cjupgkimp20qw1fs0ettjvjht',
-        center: [-5.986946905298026, 37.358331180668316], // starting position [lng, lat]
-        zoom: 15 // starting zoom
+        center: [-5.986946905298026, 37.358331180668316],
+        zoom: 15
     });
 
     map.addControl(new mapboxgl.NavigationControl());
@@ -244,7 +244,6 @@
 
     var points = [];
 
-    // Create a popup, but don't add it to the map yet.
     var popup = new mapboxgl.Popup({
         closeButton: false
     });
@@ -253,7 +252,6 @@
     var listingEl = document.getElementById('feature-listing');
 
     function renderListings(features) {
-        // Clear any existing listings
         listingEl.innerHTML = '';
         if (features.length) {
             features.forEach(function (feature) {
@@ -262,7 +260,6 @@
                 item.target = '_blank';
                 item.textContent = prop.title;
                 item.addEventListener('mouseover', function () {
-                    // Highlight corresponding feature on the map
                     popup.setLngLat([String(feature.geometry.coordinates).split(",")[0], String(feature.geometry.coordinates).split(",")[1]])
                         .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p><b>Description: </b>' + feature.properties.description + '</p>' +
                             '<p><b>Date: </b>' + feature.properties.date + '</p><p><b>Hour: </b>' + feature.properties.hour + '</p><p><b>Duration: </b>' + feature.properties.duration + '</p>')
@@ -271,17 +268,14 @@
                 listingEl.appendChild(item);
             });
 
-            // Show the filter input
             filterEl.parentNode.style.display = 'block';
         } else {
             var empty = document.createElement('p');
             empty.textContent = 'Drag the map to populate results';
             listingEl.appendChild(empty);
 
-            // Hide the filter input
             filterEl.parentNode.style.display = 'none';
 
-            // remove features filter
             map.setFilter('app point', ['has', 'title']);
         }
     }
@@ -293,7 +287,7 @@
     map.on('load', function () {
 
         map.on('moveend', function () {
-            var layersArray = ['app point', 'app poly', 'app line', 'point', 'polygon', 'line']
+            var layersArray = ['app point', 'point', 'polygon', 'line']
             var layersCopy = []
             for(layerElement in layersArray){
                 if(typeof map.getLayer(layersArray[layerElement]) != "undefined"){
@@ -316,7 +310,6 @@
         /*map.on('mousemove', 'app point', function (e) {
             map.getCanvas().style.cursor = 'pointer';
 
-            // Populate the popup and set its coordinates based on the feature.
             var feature = e.features[0];
             popup.setLngLat([String(feature.geometry.coordinates).split(",")[0], String(feature.geometry.coordinates).split(",")[1]])
                 .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p><b>Description: </b>' + feature.properties.description + '</p>' +
@@ -332,17 +325,13 @@
         filterEl.addEventListener('keyup', function (e) {
             var value = normalize(e.target.value);
 
-            // Filter visible features that don't match the input value.
             var filtered = points.filter(function (feature) {
                 var title = normalize(feature.properties.title);
-                {#var description = normalize(feature.properties.description);#}
                 return title.indexOf(value) > -1;
             });
 
-            // Populate the sidebar with filtered results
             renderListings(filtered);
 
-            // Set the filter to populate features into the layer.
             map.setFilter('app point', ['match', ['get', 'title'], filtered.map(function (feature) {
                 return feature.properties.title;
             }), true, false]);
@@ -350,8 +339,6 @@
 
         renderListings([]);
     });
-
-    // Others
 
     //Draw buttons
     var Draw = new MapboxDraw({
@@ -535,9 +522,6 @@
 
     });
 
-    //----- END send card
-
-    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
     map.on('mouseenter', 'app point', function () {
         map.getCanvas().style.cursor = 'pointer';
     });
@@ -550,7 +534,6 @@
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    // Change it back to a pointer when it leaves.
     map.on('mouseleave', 'app point', function () {
         map.getCanvas().style.cursor = '';
     });
