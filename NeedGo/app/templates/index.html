@@ -153,7 +153,7 @@
     <fieldset>
         <input id='feature-filter' type='text' placeholder='Filter results by title'/>
     </fieldset>
-    <div id='feature-listing' class='listing'></div>
+    <div id='feature-listing' class='listing' style="max-height: 94%;"></div>
 </div>
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -260,7 +260,6 @@
                 var prop = feature.properties;
                 var item = document.createElement('a');
                 item.target = '_blank';
-                {#item.href = prop.wikipedia;#}
                 item.textContent = prop.title;
                 item.addEventListener('mouseover', function () {
                     // Highlight corresponding feature on the map
@@ -291,34 +290,18 @@
         return string.trim().toLowerCase();
     }
 
-    function getUniqueFeatures(array, comparatorProperty) {
-        var existingFeatureKeys = {};
-        var uniqueFeatures = array.filter(function (el) {
-            if (existingFeatureKeys[el.properties[comparatorProperty]]) {
-                return false;
-            } else {
-                existingFeatureKeys[el.properties[comparatorProperty]] = true;
-                return true;
-            }
-        });
-
-        return uniqueFeatures;
-    }
-
     map.on('load', function () {
 
         map.on('moveend', function () {
             var features = map.queryRenderedFeatures({layers: ['app point']});
 
             if (features) {
-                uniqueFeatures = getUniqueFeatures(features, "title");
 
-                renderListings(uniqueFeatures);
+                renderListings(features);
 
-                // Clear the input container
                 filterEl.value = '';
 
-                points = uniqueFeatures;
+                points = features;
             }
         });
 
