@@ -16,7 +16,6 @@ scheduler = BlockingScheduler()
 @scheduler.scheduled_job('interval', id='update_mapbox_function_id', seconds=60)
 def update_mapbox_function():
 
-
     """
     CRON job to update mapbox.
     TRIGGER: Every minute.
@@ -35,14 +34,11 @@ def update_mapbox_function():
 
     try:
         request = post(url, json=params)
-
         response = request.text
-        print(response)
-
     except RequestException:
-
         response = "Error saving record in mapbox"
 
+    print(response)
     return response
 
 
@@ -77,6 +73,7 @@ def delete_mapbox_function():
     except RequestException:
         response = "Error deleting record in mapbox"
 
+    print(response)
     return response
 
 
