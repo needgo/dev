@@ -293,7 +293,7 @@
     map.on('load', function () {
 
         map.on('moveend', function () {
-            var features = map.queryRenderedFeatures({layers: ['app point']});
+            var features = map.queryRenderedFeatures({layers: ['app point', 'point', 'polygon', 'line']});
 
             if (features) {
 
@@ -305,7 +305,7 @@
             }
         });
 
-        map.on('mousemove', 'app point', function (e) {
+        /*map.on('mousemove', 'app point', function (e) {
             map.getCanvas().style.cursor = 'pointer';
 
             // Populate the popup and set its coordinates based on the feature.
@@ -319,7 +319,7 @@
         map.on('mouseleave', 'app point', function () {
             map.getCanvas().style.cursor = '';
             popup.remove();
-        });
+        });*/
 
         filterEl.addEventListener('keyup', function (e) {
             var value = normalize(e.target.value);
@@ -475,7 +475,8 @@
                         "type": "symbol",
                         "source": "point",
                         "layout": {
-                            "icon-image": "marker-15"
+                            "icon-image": "marker-15",
+                            "icon-size": 2
                         }
                     });
 
