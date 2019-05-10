@@ -11,7 +11,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 scheduler = BlockingScheduler()
 
 
-@scheduler.scheduled_job('interval', id='update_mapbox_function_id', seconds=10)
+@scheduler.scheduled_job('interval', id='update_mapbox_function_id', seconds=15)
 def update_mapbox_function():
 
 
