@@ -1,9 +1,8 @@
 import os
 import django
-from requests import post, get
+from requests import get, post, delete
 from requests.exceptions import RequestException
 from datetime import datetime
-from .app.mapbox_manager import delete_mapbox
 import json
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NeedGo.settings')
@@ -63,7 +62,17 @@ def delete_mapbox_function(request):
             featureDate = datetime.strptime(featureDateString, '%Y-%m-%d %H:%M:%S')
 
             if featureDate < datetime.now():
-                delete_mapbox(feature['id'])
+                # Mapbox configuration
+                token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
+
+                url = "https://api.mapbox.com/datasets/v1/needgo/cjuojgd9c01z632la84qa1v61/features/" + str(
+                    feature['id']) + "?access_token=" + token
+
+                try:
+                    request = delete(url)
+                    response = request.text
+                except RequestException:
+                    response = "Error deleting record in mapbox"
 
     except RequestException:
         response = "Error deleting record in mapbox"
