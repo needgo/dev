@@ -82,7 +82,7 @@ def save_card(request):
             features[1]['properties']['date'] = date
             create_mapbox(features[1])
 
-            return JSONResponse("", status=200)
+            return JSONResponse(features[0]['properties'], status=200)
 
     elif len(features) > 2:
         return JSONResponse("You can't save more than two shapes at the same time", status=400)
@@ -94,7 +94,7 @@ def save_card(request):
     features[0]['properties']['date'] = date
     create_mapbox(features[0])
 
-    return JSONResponse("", status=200)
+    return JSONResponse(features[0]['properties'], status=200)
 
 
 # Auxiliary methods

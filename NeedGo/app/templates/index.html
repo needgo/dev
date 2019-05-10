@@ -405,6 +405,14 @@
 
     //---- END draw
 
+    //Counter
+    var pointMapId = 0
+    var lineMapId = 0
+    var lineData = []
+    var pointData = []
+    var polygonData = []
+    var polygonMapId = 0
+
     //Send card
     $("#save").click(function () {
         $(".error").html("")
@@ -413,6 +421,102 @@
             console.log(status);
 
             if (status == "success") {
+
+
+                let aux= Draw.getAll()['features']
+                for (var i in aux) {
+                    aux[i].properties = data
+                    if (aux[i].geometry.type == "LineString"){
+                        lineData.push(aux[i]);
+
+                    }else if(aux[i].geometry.type == "Point"){
+                        pointData.push(aux[i]);
+
+                    }else if(aux[i].geometry.type == "Polygon"){
+                        polygonData.push(aux[i]);
+                    }
+
+                }
+
+                //Layer for lines
+                if (lineMapId == 0) {
+                    map.addSource('line', {type: 'geojson', data: { type: "FeatureCollection", features:lineData}});
+                    map.addLayer({
+                        "id": "line",
+                        "type": "line",
+                        "source": "line",
+                        "paint": {
+                            "line-color": "#088",
+                            "line-opacity": 0.75,
+                            "line-width": 5
+                        }
+                    });
+
+                    map.on('mouseenter', 'line', function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                    map.on('mouseleave', 'line', function () {
+                        map.getCanvas().style.cursor = '';
+                    });
+
+                    lineMapId += 1
+                }else{
+                    map.getSource('line').setData({ type: "FeatureCollection", features:lineData})
+                }
+
+
+
+                //Layer for points
+                if (pointMapId == 0) {
+                    map.addSource('point', {type: 'geojson', data: { type: "FeatureCollection", features:pointData}});
+                    map.addLayer({
+                        "id": "point",
+                        "type": "symbol",
+                        "source": "point",
+                        "layout": {
+                            "icon-image": "marker-15"
+                        }
+                    });
+
+                    map.on('mouseenter', 'point', function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                     map.on('mouseleave', 'point', function () {
+                        map.getCanvas().style.cursor = '';
+                    });
+
+                    pointMapId += 1
+                }else{
+                    map.getSource('point').setData({ type: "FeatureCollection", features: pointData})
+                }
+
+                //Layer for polygon
+                if (polygonMapId == 0) {
+                    map.addSource('polygon', {type: 'geojson', data: { type: "FeatureCollection", features:polygonData}});
+                    map.addLayer({
+                        "id": "polygon",
+                        "type": "fill",
+                        "source": "polygon",
+                        'paint': {
+                            'fill-color': '#088',
+                            'fill-opacity': 0.8
+                        }
+                    });
+
+                    map.on('mouseenter', 'polygon', function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                    map.on('mouseleave', 'polygon', function () {
+                        map.getCanvas().style.cursor = '';
+                    });
+
+                    polygonMapId += 1
+                }else{
+                    map.getSource('polygon').setData({ type: "FeatureCollection", features: polygonData})
+                }
                 reset()
             }
 
@@ -421,6 +525,7 @@
         });
 
     });
+
     //----- END send card
 
     // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
@@ -452,7 +557,7 @@
     map.on('click', function (e) {
 
         var features = map.queryRenderedFeatures(e.point, {
-            layers: ['app point', 'app poly', 'app line'],
+            layers: ['app point', 'app poly', 'app line', 'point', 'line', 'polygon'],
         });
 
         if (!features.length) {
