@@ -1,7 +1,10 @@
 import os
 import django
-from requests import post
+from requests import post, get
 from requests.exceptions import RequestException
+from datetime import datetime
+from .app.mapbox_manager import delete_mapbox
+import json
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NeedGo.settings')
 django.setup()
@@ -11,7 +14,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 scheduler = BlockingScheduler()
 
 
-@scheduler.scheduled_job('interval', id='update_mapbox_function_id', seconds=30)
+@scheduler.scheduled_job('interval', id='update_mapbox_function_id', seconds=60)
 def update_mapbox_function():
 
 
@@ -40,6 +43,30 @@ def update_mapbox_function():
     except RequestException:
 
         response = "Error saving record in mapbox"
+
+    return response
+
+
+@scheduler.scheduled_job('cron', id='delete_mapbox_function', hour=0)
+def delete_mapbox_function(request):
+    # Mapbox configuration
+    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
+
+    url = "https://api.mapbox.com/datasets/v1/needgo/cjuojgd9c01z632la84qa1v61/features/" + "?access_token=" + token
+
+    try:
+        request = get(url)
+        response = json.loads(request.text)
+
+        for feature in response['features']:
+            featureDateString = feature['properties']['date']+" "+feature['properties']['hour']+":00"
+            featureDate = datetime.strptime(featureDateString, '%Y-%m-%d %H:%M:%S')
+
+            if featureDate < datetime.now():
+                delete_mapbox(feature['id'])
+
+    except RequestException:
+        response = "Error deleting record in mapbox"
 
     return response
 
