@@ -307,21 +307,6 @@
             }
         });
 
-        /*map.on('mousemove', 'app point', function (e) {
-            map.getCanvas().style.cursor = 'pointer';
-
-            var feature = e.features[0];
-            popup.setLngLat([String(feature.geometry.coordinates).split(",")[0], String(feature.geometry.coordinates).split(",")[1]])
-                .setHTML('<h3 style="text-align:center">' + feature.properties.title + '</h3><p><b>Description: </b>' + feature.properties.description + '</p>' +
-                    '<p><b>Date: </b>' + feature.properties.date + '</p><p><b>Hour: </b>' + feature.properties.hour + '</p><p><b>Duration: </b>' + feature.properties.duration + '</p>')
-                .addTo(map);
-        });
-
-        map.on('mouseleave', 'app point', function () {
-            map.getCanvas().style.cursor = '';
-            popup.remove();
-        });*/
-
         filterEl.addEventListener('keyup', function (e) {
             var value = normalize(e.target.value);
 

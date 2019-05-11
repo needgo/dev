@@ -21,37 +21,3 @@ def create_mapbox(geojson):
         response = "Error saving record in mapbox"
 
     return response
-
-
-def delete_mapbox(idFeature):
-    # Mapbox configuration
-    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
-
-    url = "https://api.mapbox.com/datasets/v1/needgo/cjuojgd9c01z632la84qa1v61/features/" + str(idFeature) + "?access_token=" + token
-
-    try:
-        request = delete(url)
-        response = request.text
-    except RequestException:
-        response = "Error deleting record in mapbox"
-
-    return response
-
-def update_mapbox():
-    token = "sk.eyJ1IjoibmVlZGdvIiwiYSI6ImNqdXBhcjFycDMyYWs0NHFqZW91M24xbnAifQ.q89AEpZGKAYihE0wRRMnQQ"
-
-
-    url = "https://api.mapbox.com/uploads/v1/needgo?access_token="+token
-    params = {
-        "tileset": "needgo.cjuojgd9c01z632la84qa1v61-0fykf",
-        "url": "mapbox://datasets/needgo/"+"cjuojgd9c01z632la84qa1v61",
-        "name": "needgo.cjuojgd9c01z632la84qa1v61-0fykf".split(".")[1]
-    }
-
-    try:
-        request = post(url, json=params)
-        response = request.text
-    except RequestException:
-        response = "Error saving record in mapbox"
-
-    return response
