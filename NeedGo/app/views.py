@@ -142,7 +142,7 @@ def check_form(request):
 
     # Check duration
     if duration == None or duration.strip() == "":
-        return JSONResponse("You must especify the description", status=400)
+        return JSONResponse("You must especify the duration", status=400)
     elif not duration.isdigit():
         return JSONResponse("The duration must be a number", status=400)
     elif int(duration) < 1:
